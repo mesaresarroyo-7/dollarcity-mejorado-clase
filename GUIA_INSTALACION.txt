@@ -1,0 +1,290 @@
+# 🏪 Sistema Web de Gestión Integral — DollarCity Sede Santa Anita
+
+Sistema de Compras, Ventas y Almacén desarrollado con **React.js**, **Node.js (Express)** y **PostgreSQL**.
+
+---
+
+## 📋 Requisitos Previos
+
+Antes de empezar, asegúrate de tener instalado:
+
+| Software | Versión mínima | Descarga |
+|---|---|---|
+| **Node.js** | v18 o superior | [https://nodejs.org](https://nodejs.org) |
+| **PostgreSQL** | v14 o superior | [https://www.postgresql.org/download](https://www.postgresql.org/download) |
+| **Git** | cualquier versión | [https://git-scm.com](https://git-scm.com) |
+
+> ⚠️ **Importante:** Durante la instalación de PostgreSQL, anota la **contraseña** que configuras para el usuario `postgres`. La necesitarás más adelante.
+
+---
+
+## 🚀 Instalación paso a paso
+
+### 1. Clonar el repositorio
+
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd Proyecto-agilesFinal
+```
+
+O si te pasaron la carpeta, simplemente ábrela en tu terminal.
+
+---
+
+### 2. Crear la Base de Datos
+
+Abre **pgAdmin** o una terminal de PostgreSQL (`psql`) y ejecuta:
+
+#### Opción A: Desde pgAdmin
+1. Abre pgAdmin
+2. Click derecho en **Databases** → **Create** → **Database**
+3. Nombre: `dollarcity_santa_anita`
+4. Click **Save**
+
+#### Opción B: Desde terminal (psql)
+```bash
+psql -U postgres
+```
+```sql
+CREATE DATABASE dollarcity_santa_anita;
+\q
+```
+
+> Si te pide contraseña, usa la que configuraste al instalar PostgreSQL.
+
+---
+
+### 3. Ejecutar el Schema (crear tablas)
+
+Desde la terminal, navega a la carpeta del proyecto y ejecuta:
+
+```bash
+psql -U postgres -d dollarcity_santa_anita -f backend/database/schema.sql
+```
+
+> **¿No reconoce `psql`?** Agrega PostgreSQL al PATH de tu sistema:
+> - Windows: Busca la carpeta `C:\Program Files\PostgreSQL\<version>\bin` y agrégala al PATH en Variables de Entorno.
+> - O usa la ruta completa: `"C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d dollarcity_santa_anita -f backend/database/schema.sql`
+
+---
+
+### 4. Cargar datos iniciales (Seed)
+
+```bash
+psql -U postgres -d dollarcity_santa_anita -f backend/database/seed.sql
+```
+
+Esto crea:
+- 3 usuarios (admin, vendedor, almacenero)
+- 4 proveedores
+- 15 productos con stock
+
+---
+
+### 5. Configurar el Backend
+
+```bash
+cd backend
+```
+
+Copia el archivo de variables de entorno:
+
+```bash
+copy .env.example .env
+```
+> En Mac/Linux: `cp .env.example .env`
+
+Abre el archivo `.env` y **cambia la contraseña** si la tuya es diferente:
+
+```env
+PORT=4000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=dollarcity_santa_anita
+DB_USER=postgres
+DB_PASSWORD=TU_CONTRASEÑA_DE_POSTGRES
+JWT_SECRET=super_secret_key_change_me
+PAYMENT_MODE=mock
+```
+
+> ⚠️ **Lo más importante es `DB_PASSWORD`.** Debe coincidir con la contraseña de tu PostgreSQL.
+
+Instala dependencias:
+
+```bash
+npm install
+```
+
+---
+
+### 6. Configurar el Frontend
+
+Abre **otra terminal** (deja la del backend abierta):
+
+```bash
+cd frontend
+```
+
+Copia el archivo de variables de entorno:
+
+```bash
+copy .env.example .env
+```
+> En Mac/Linux: `cp .env.example .env`
+
+El archivo `.env` debería contener:
+
+```env
+VITE_API_URL=http://localhost:4000/api
+```
+
+Instala dependencias:
+
+```bash
+npm install
+```
+
+---
+
+### 7. Levantar el proyecto
+
+Necesitas **2 terminales abiertas** al mismo tiempo:
+
+#### Terminal 1 — Backend
+```bash
+cd backend
+node server.js
+```
+
+Deberías ver:
+```
+==============================================
+  DollarCity Santa Anita - Backend
+  Servidor corriendo en http://localhost:4000
+  API Base: http://localhost:4000/api
+==============================================
+✅ Conectado a PostgreSQL - dollarcity_santa_anita
+```
+
+#### Terminal 2 — Frontend
+```bash
+cd frontend
+npm run dev
+```
+
+Deberías ver:
+```
+VITE v8.x.x  ready in xxx ms
+➜  Local:   http://localhost:5173/
+```
+
+---
+
+### 8. Abrir en el navegador
+
+Abre: **http://localhost:5173**
+
+---
+
+## 👤 Credenciales de Prueba
+
+| Rol | Email | Contraseña |
+|---|---|---|
+| **Admin** | admin@dollarcity.pe | Admin123! |
+| **Vendedor** | vendedor@dollarcity.pe | Vendedor123! |
+| **Almacenero** | almacen@dollarcity.pe | Almacen123! |
+
+> El usuario **Admin** tiene acceso a todos los módulos. Vendedor solo a Ventas/Pago. Almacenero solo a Almacén/Compras.
+
+---
+
+## 🎯 Flujo de Demo Rápido
+
+1. **Login** → Ingresar con admin@dollarcity.pe / Admin123!
+2. **Dashboard** → Ver KPIs y alertas de stock
+3. **Ventas** → Buscar productos, agregarlos al carrito
+4. **Pago** → Seleccionar token `tok_test_aprobado`, tipo BOLETA, click Pagar
+5. **Ver Ticket** → Comprobante electrónico generado
+6. **Almacén** → Verificar que el stock disminuyó
+7. **Almacén → Kardex** (botón 📋) → Ver movimiento SALIDA/VENTA
+8. **Compras** → Seleccionar proveedor, agregar productos, registrar compra
+9. **Almacén** → Verificar que el stock aumentó + Kardex con INGRESO/COMPRA
+10. **Reportes** → Ver productos más vendidos
+
+---
+
+## 🗂️ Estructura del Proyecto
+
+```
+Proyecto-agilesFinal/
+├── backend/
+│   ├── .env                    ← Variables de entorno (no subir a Git)
+│   ├── .env.example            ← Plantilla de variables
+│   ├── package.json
+│   ├── server.js               ← Punto de entrada del servidor
+│   ├── database/
+│   │   ├── schema.sql          ← Estructura de las tablas
+│   │   ├── seed.sql            ← Datos iniciales
+│   │   └── generate-seeds.js   ← Script para regenerar seeds
+│   └── src/
+│       ├── config/db.js        ← Conexión a PostgreSQL
+│       ├── controllers/        ← Lógica de negocio
+│       ├── routes/             ← Rutas de la API
+│       ├── middlewares/        ← Auth JWT, roles, errores
+│       ├── services/           ← Pasarela de pago mock
+│       └── utils/              ← Generador de comprobantes
+│
+└── frontend/
+    ├── .env                    ← URL del backend
+    ├── .env.example
+    ├── package.json
+    ├── vite.config.js
+    ├── index.html
+    └── src/
+        ├── main.jsx            ← Punto de entrada
+        ├── App.jsx             ← Rutas y layout
+        ├── api/axiosConfig.js  ← Cliente HTTP con JWT
+        ├── context/            ← AuthContext, CartContext
+        ├── routes/             ← Rutas protegidas
+        ├── components/         ← Navbar, ProductCard, Cart, Ticket
+        ├── pages/              ← Login, Dashboard, Ventas, Pago, etc.
+        └── styles/global.css   ← Estilos globales (dark mode)
+```
+
+---
+
+## ❓ Solución de Problemas Comunes
+
+### "Error al iniciar sesión"
+- Verifica que el **backend esté corriendo** (Terminal 1 con `node server.js`)
+- Verifica que la URL del frontend sea `http://localhost:5173` (no `127.0.0.1`)
+
+### "CORS error" en el navegador
+- Usa `http://localhost:5173` en vez de `http://127.0.0.1:5173`
+- O reinicia el backend, ya está configurado para aceptar ambos
+
+### "psql no se reconoce"
+- Agrega PostgreSQL al PATH: `C:\Program Files\PostgreSQL\<version>\bin`
+- O usa pgAdmin para ejecutar los archivos SQL
+
+### "Error de conexión a la base de datos"
+- Verifica que PostgreSQL esté corriendo (busca el servicio `postgresql` en Servicios de Windows)
+- Verifica que la contraseña en `backend/.env` sea correcta
+- Verifica que la base de datos `dollarcity_santa_anita` exista
+
+### "npm install falla"
+- Verifica tu versión de Node: `node --version` (debe ser v18+)
+- Intenta: `npm install --legacy-peer-deps`
+
+---
+
+## 🛠️ Stack Tecnológico
+
+| Capa | Tecnología |
+|---|---|
+| Frontend | React.js 19 + Vite 8 + React Router DOM 7 |
+| Backend | Node.js + Express.js 4 |
+| Base de Datos | PostgreSQL 18 |
+| Autenticación | bcrypt + JWT |
+| HTTP Client | Axios |
+| Estado Global | Context API |

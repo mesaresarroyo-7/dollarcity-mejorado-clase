@@ -1,0 +1,150 @@
+GUIA FACIL DE INSTALACION - DOLLARCITY MEJORADO
+=================================================
+
+Proyecto web de gestion DollarCity.
+Tecnologias:
+- Frontend: React + Vite
+- Backend: Node.js + Express
+- Base de datos: PostgreSQL en Supabase (ya configurada en el archivo backend/.env)
+
+IMPORTANTE
+----------
+Este repositorio ya incluye los archivos .env necesarios para que funcione en clase.
+No necesitas crear la base de datos ni ejecutar archivos SQL si solo quieres probar la app.
+
+Lo unico que NO viene incluido es node_modules, porque esa carpeta pesa mucho y se genera automaticamente con npm install.
+
+REQUISITOS
+----------
+1. Tener instalado Node.js 18 o superior.
+   Descargar desde: https://nodejs.org/
+
+2. Tener Git instalado si vas a clonar el repositorio.
+   Descargar desde: https://git-scm.com/
+
+No es obligatorio instalar PostgreSQL para probar esta version, porque usa la base de datos remota configurada.
+
+FORMA 1: DESCARGAR COMO ZIP
+---------------------------
+1. En GitHub, presiona el boton verde Code.
+2. Presiona Download ZIP.
+3. Extrae el ZIP en una carpeta facil, por ejemplo el Escritorio.
+4. Entra a la carpeta extraida.
+
+FORMA 2: CLONAR CON GIT
+-----------------------
+Abre una terminal y ejecuta:
+
+git clone URL_DEL_REPOSITORIO
+cd dollarcity-mejorado-clase
+
+INSTALACION PASO A PASO
+-----------------------
+Abre una terminal en la carpeta del proyecto y ejecuta:
+
+1. Instalar dependencias del backend:
+
+cd backend
+npm install
+
+2. Instalar dependencias del frontend:
+
+cd ../frontend
+npm install
+
+COMO EJECUTAR LA APP
+--------------------
+Necesitas 2 terminales abiertas al mismo tiempo.
+
+TERMINAL 1 - BACKEND
+Desde la carpeta principal del proyecto:
+
+cd backend
+npm start
+
+Si todo esta bien, el backend queda en:
+http://localhost:4000
+
+Puedes probarlo abriendo:
+http://localhost:4000/api/health
+
+Debe responder algo parecido a:
+status: OK
+database: CONNECTED
+
+TERMINAL 2 - FRONTEND
+Desde la carpeta principal del proyecto:
+
+cd frontend
+npm run dev
+
+Si todo esta bien, Vite mostrara una URL parecida a:
+http://localhost:5173/
+
+Abre esa URL en el navegador.
+
+CREDENCIALES DE PRUEBA
+----------------------
+Admin:
+Correo: admin@dollarcity.pe
+Clave: Admin123!
+
+Vendedor:
+Correo: vendedor@dollarcity.pe
+Clave: Vendedor123!
+
+Almacenero:
+Correo: almacen@dollarcity.pe
+Clave: Almacen123!
+
+COMANDOS RAPIDOS
+----------------
+Tambien puedes usar los archivos .bat incluidos:
+
+1. Doble clic en:
+   INSTALAR_DEPENDENCIAS.bat
+
+2. Luego abre dos ventanas:
+   INICIAR_BACKEND.bat
+   INICIAR_FRONTEND.bat
+
+3. Abre en el navegador:
+   http://localhost:5173/
+
+PROBLEMAS COMUNES
+-----------------
+
+1. "npm no se reconoce como comando"
+   Solucion: instala Node.js desde https://nodejs.org/ y vuelve a abrir la terminal.
+
+2. "Cannot find module" o errores de dependencias
+   Solucion: ejecuta npm install dentro de backend y frontend.
+
+3. El frontend abre pero no carga datos
+   Verifica que el backend este prendido en otra terminal con npm start.
+   Prueba esta URL:
+   http://localhost:4000/api/health
+
+4. El puerto 4000 o 5173 esta ocupado
+   Cierra otras terminales de Node/Vite o reinicia la computadora.
+
+5. Error de conexion a base de datos
+   Revisa que el archivo backend/.env exista. En esta entrega ya viene incluido.
+
+ORDEN RESUMIDO
+--------------
+
+cd backend
+npm install
+npm start
+
+En otra terminal:
+
+cd frontend
+npm install
+npm run dev
+
+Luego abrir:
+http://localhost:5173/
+
+LISTO.
